@@ -15,7 +15,7 @@ class ProfileScreen extends StatelessWidget {
                 style: Theme.of(context).textTheme.headlineLarge,
               ),
               SizedBox(height: 24),
-              
+
               // Profile Header
               Center(
                 child: Column(
@@ -23,11 +23,7 @@ class ProfileScreen extends StatelessWidget {
                     CircleAvatar(
                       radius: 50,
                       backgroundColor: Theme.of(context).primaryColor,
-                      child: Icon(
-                        Icons.person,
-                        size: 50,
-                        color: Colors.white,
-                      ),
+                      child: Icon(Icons.person, size: 50, color: Colors.white),
                     ),
                     SizedBox(height: 16),
                     Text(
@@ -39,9 +35,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     Text(
                       'georgemisael@email.com',
-                      style: TextStyle(
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(color: Colors.grey),
                     ),
                     SizedBox(height: 8),
                     ElevatedButton(
@@ -56,69 +50,69 @@ class ProfileScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               SizedBox(height: 32),
-              
+
               // Settings Section
               Text(
                 'Pengaturan',
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
               SizedBox(height: 16),
-              
+
               _buildSettingsItem(
                 context,
                 icon: Icons.notifications,
                 title: 'Notifikasi',
                 subtitle: 'Atur notifikasi aplikasi',
               ),
-              
+
               _buildSettingsItem(
                 context,
                 icon: Icons.language,
                 title: 'Bahasa',
                 subtitle: 'Bahasa Indonesia',
               ),
-              
+
               _buildSettingsItem(
                 context,
                 icon: Icons.dark_mode,
                 title: 'Tema',
                 subtitle: 'Terang',
               ),
-              
+
               SizedBox(height: 32),
-              
+
               // App Info Section
               Text(
                 'Informasi Aplikasi',
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
               SizedBox(height: 16),
-              
+
               _buildSettingsItem(
                 context,
                 icon: Icons.info,
                 title: 'Tentang Aplikasi',
                 subtitle: 'Versi 1.0.0',
               ),
-              
+
               _buildSettingsItem(
                 context,
                 icon: Icons.help,
                 title: 'Bantuan',
                 subtitle: 'FAQ dan panduan pengguna',
               ),
-              
+
               _buildSettingsItem(
                 context,
                 icon: Icons.privacy_tip,
                 title: 'Kebijakan Privasi',
                 subtitle: 'Informasi penggunaan data',
               ),
-              
+
               SizedBox(height: 32),
-              
+
               // Logout Button
               Center(
                 child: ElevatedButton.icon(
@@ -133,7 +127,7 @@ class ProfileScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              
+
               SizedBox(height: 32),
             ],
           ),
@@ -141,7 +135,7 @@ class ProfileScreen extends StatelessWidget {
       ),
     );
   }
-  
+
   Widget _buildSettingsItem(
     BuildContext context, {
     required IconData icon,
@@ -151,10 +145,7 @@ class ProfileScreen extends StatelessWidget {
     return Card(
       margin: EdgeInsets.only(bottom: 16),
       child: ListTile(
-        leading: Icon(
-          icon,
-          color: Theme.of(context).primaryColor,
-        ),
+        leading: Icon(icon, color: Theme.of(context).primaryColor),
         title: Text(title),
         subtitle: Text(subtitle),
         trailing: Icon(Icons.arrow_forward_ios, size: 16),
@@ -165,4 +156,3 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 }
-

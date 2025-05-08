@@ -5,36 +5,44 @@ import 'package:intl/intl.dart';
 class AccommodationCard extends StatelessWidget {
   final Accommodation accommodation;
   
-  AccommodationCard({
+  const AccommodationCard({
+    Key? key,
     required this.accommodation,
-  });
+  }) : super(key: key);
   
   @override
   Widget build(BuildContext context) {
     final currencyFormat = NumberFormat.currency(
-      locale: 'id',
+      locale: 'id_ID',
       symbol: 'Rp ',
       decimalDigits: 0,
     );
     
-    return Container(
-      width: 200,
-      child: Card(
-        elevation: 4,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: SizedBox(
+        width: 200,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Image
-            ClipRRect(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
+            AspectRatio(
+              aspectRatio: 4 / 3,
               child: Image.network(
                 accommodation.imageUrl,
-                height: 100,
-                width: double.infinity,
                 fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey[300],
+                    child: const Center(
+                      child: Icon(Icons.image_not_supported, size: 40),
+                    ),
+                  );
+                },
               ),
             ),
             
@@ -47,43 +55,59 @@ class AccommodationCard extends StatelessWidget {
                   // Name
                   Text(
                     accommodation.name,
-                    style: TextStyle(
+                    style: const TextStyle(
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      fontSize: 14,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   
+                  // Location
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.location_on, color: Colors.grey, size: 14),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            accommodation.location,
+                            style: const TextStyle(color: Colors.grey, fontSize: 12),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  
                   // Rating
                   Row(
                     children: [
-                      Icon(Icons.star, color: Colors.amber, size: 14),
-                      SizedBox(width: 4),
+                      const Icon(Icons.star, color: Colors.amber, size: 16),
+                      const SizedBox(width: 4),
                       Text(
                         accommodation.rating.toString(),
-                        style: TextStyle(fontSize: 12),
+                        style: const TextStyle(fontSize: 12),
                       ),
                     ],
                   ),
                   
-                  SizedBox(height: 8),
+                  const SizedBox(height: 8),
                   
                   // Price
                   Text(
                     currencyFormat.format(accommodation.price),
                     style: TextStyle(
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
-                  
-                  Text(
+                  const Text(
                     'per malam',
-                    style: TextStyle(
-                      fontSize: 10,
-                      color: Colors.grey,
-                    ),
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ],
               ),
@@ -94,4 +118,3 @@ class AccommodationCard extends StatelessWidget {
     );
   }
 }
-

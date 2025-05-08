@@ -5,162 +5,168 @@ import 'package:intl/intl.dart';
 class AccommodationListItem extends StatelessWidget {
   final Accommodation accommodation;
   
-  AccommodationListItem({
+  const AccommodationListItem({
+    Key? key,
     required this.accommodation,
-  });
+  }) : super(key: key);
   
   @override
   Widget build(BuildContext context) {
     final currencyFormat = NumberFormat.currency(
-      locale: 'id',
+      locale: 'id_ID',
       symbol: 'Rp ',
       decimalDigits: 0,
     );
     
     return Card(
-      elevation: 4,
+      clipBehavior: Clip.antiAlias,
+      elevation: 2,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(15),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Image
-          ClipRRect(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-            child: Image.network(
-              accommodation.imageUrl,
-              height: 200,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-          
-          // Content
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Name and Rating
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        accommodation.name,
-                        style: TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
-                        ),
-                      ),
+      child: InkWell(
+        onTap: () {
+          // Navigasi ke detail akomodasi (bisa diimplementasikan nanti)
+        },
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Image
+            SizedBox(
+              width: 120,
+              height: 120,
+              child: Image.network(
+                accommodation.imageUrl,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey[300],
+                    child: const Center(
+                      child: Icon(Icons.image_not_supported, size: 40),
                     ),
+                  );
+                },
+              ),
+            ),
+            
+            // Content
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Name and Rating
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Icon(Icons.star, color: Colors.amber),
-                        SizedBox(width: 4),
-                        Text(
-                          accommodation.rating.toString(),
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                        Expanded(
+                          child: Text(
+                            accommodation.name,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            const Icon(Icons.star, color: Colors.amber, size: 16),
+                            const SizedBox(width: 4),
+                            Text(
+                              accommodation.rating.toString(),
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ],
-                ),
-                
-                // Location
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Row(
-                    children: [
-                      Icon(Icons.location_on, color: Colors.grey, size: 16),
-                      SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          accommodation.location,
-                          style: TextStyle(color: Colors.grey),
-                        ),
+                    
+                    // Location
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Row(
+                        children: [
+                          const Icon(Icons.location_on, color: Colors.grey, size: 14),
+                          const SizedBox(width: 4),
+                          Expanded(
+                            child: Text(
+                              accommodation.location,
+                              style: const TextStyle(color: Colors.grey, fontSize: 12),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                ),
-                
-                // Description
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Text(
-                    accommodation.description,
-                    style: TextStyle(fontSize: 14),
-                  ),
-                ),
-                
-                // Amenities
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: accommodation.amenities.map((amenity) {
-                      return Container(
-                        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          amenity,
-                          style: TextStyle(fontSize: 12),
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                
-                Divider(),
-                
-                // Price and Book Button
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          currencyFormat.format(accommodation.price),
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                        Text(
-                          'per malam',
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
                     ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Booking functionality
-                      },
-                      child: Text('Pesan Sekarang'),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Theme.of(context).primaryColor, // Ganti primary dengan backgroundColor
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
+                    
+                    // Facilities
+                    Wrap(
+                      spacing: 4,
+                      runSpacing: 4,
+                      children: accommodation.facilities.map((facility) {
+                        return Chip(
+                          label: Text(
+                            facility,
+                            style: TextStyle(
+                              fontSize: 10,
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                          backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+                          padding: EdgeInsets.zero,
+                          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          labelPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: -2),
+                        );
+                      }).toList(),
+                    ),
+                    
+                    // Price
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                currencyFormat.format(accommodation.price),
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                              ),
+                              const Text(
+                                'per malam',
+                                style: TextStyle(fontSize: 12, color: Colors.grey),
+                              ),
+                            ],
+                          ),
+                          ElevatedButton(
+                            onPressed: () {
+                              // Implementasi booking
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(context).primaryColor,
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                            ),
+                            child: const Text('Pesan'),
+                          ),
+                        ],
                       ),
                     ),
                   ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 }
-

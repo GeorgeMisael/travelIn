@@ -11,6 +11,7 @@ class FavoritesScreen extends StatefulWidget {
 
 class _FavoritesScreenState extends State<FavoritesScreen> {
   List<Attraction> _favorites = [];
+  bool _isLoading = true;
   
   @override
   void initState() {
@@ -18,10 +19,19 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     _loadFavorites();
   }
   
-  void _loadFavorites() {
+  Future<void> _loadFavorites() async {
     setState(() {
-      _favorites = FavoritesService.getFavorites();
+      _isLoading = true;
     });
+    
+    final favorites = await FavoritesService.getFavorites();
+    
+    if (mounted) {
+      setState(() {
+        _favorites = favorites;
+        _isLoading = false;
+      });
+    }
   }
   
   @override
@@ -39,54 +49,58 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
               ),
             ),
             Expanded(
-              child: _favorites.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.favorite_border,
-                            size: 64,
-                            color: Colors.grey,
-                          ),
-                          SizedBox(height: 16),
-                          Text(
-                            'Belum ada tempat favorit',
-                            style: TextStyle(color: Colors.grey),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'Tambahkan tempat favorit dengan menekan ikon hati',
-                            style: TextStyle(color: Colors.grey),
-                            textAlign: TextAlign.center,
-                          ),
-                        ],
-                      ),
+              child: _isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
                     )
-                  : ListView.builder(
-                      padding: EdgeInsets.all(16),
-                      itemCount: _favorites.length,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          child: AttractionCard(
-                            attraction: _favorites[index],
-                            onTap: () async {
-                              await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AttractionDetailsScreen(
-                                    attraction: _favorites[index],
-                                  ),
-                                ),
-                              );
-                              // Refresh favorites when returning from details
-                              _loadFavorites();
-                            },
+                  : _favorites.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.favorite_border,
+                                size: 64,
+                                color: Colors.grey,
+                              ),
+                              SizedBox(height: 16),
+                              Text(
+                                'Belum ada tempat favorit',
+                                style: TextStyle(color: Colors.grey),
+                              ),
+                              SizedBox(height: 8),
+                              Text(
+                                'Tambahkan tempat favorit dengan menekan ikon hati',
+                                style: TextStyle(color: Colors.grey),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
-                        );
-                      },
-                    ),
+                        )
+                      : ListView.builder(
+                          padding: EdgeInsets.all(16),
+                          itemCount: _favorites.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              child: AttractionCard(
+                                attraction: _favorites[index],
+                                onTap: () async {
+                                  await Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => AttractionDetailsScreen(
+                                        attraction: _favorites[index],
+                                      ),
+                                    ),
+                                  );
+                                  // Refresh favorites when returning from details
+                                  _loadFavorites();
+                                },
+                              ),
+                            );
+                          },
+                        ),
             ),
           ],
         ),
@@ -94,4 +108,3 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     );
   }
 }
-

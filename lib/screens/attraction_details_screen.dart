@@ -15,23 +15,39 @@ class AttractionDetailsScreen extends StatefulWidget {
 }
 
 class _AttractionDetailsScreenState extends State<AttractionDetailsScreen> {
-  late bool _isFavorite;
+  // Inisialisasi dengan nilai default false
+  bool _isFavorite = false;
   
   @override
   void initState() {
     super.initState();
-    _isFavorite = FavoritesService.isFavorite(widget.attraction);
+    // Muat status favorit secara asinkron
+    _loadFavoriteStatus();
   }
   
-  void _toggleFavorite() {
-    setState(() {
-      if (_isFavorite) {
-        FavoritesService.removeFavorite(widget.attraction);
-      } else {
-        FavoritesService.addFavorite(widget.attraction);
-      }
-      _isFavorite = !_isFavorite;
-    });
+  // Metode baru untuk memuat status favorit
+  Future<void> _loadFavoriteStatus() async {
+    final isFavorite = await FavoritesService.isFavorite(widget.attraction);
+    if (mounted) {
+      setState(() {
+        _isFavorite = isFavorite;
+      });
+    }
+  }
+  
+  // Ubah metode toggle favorit untuk menangani operasi asinkron
+  Future<void> _toggleFavorite() async {
+    if (_isFavorite) {
+      await FavoritesService.removeFavorite(widget.attraction);
+    } else {
+      await FavoritesService.addFavorite(widget.attraction);
+    }
+    
+    if (mounted) {
+      setState(() {
+        _isFavorite = !_isFavorite;
+      });
+    }
   }
   
   List<Accommodation> _getNearbyAccommodations() {
@@ -213,4 +229,3 @@ class _AttractionDetailsScreenState extends State<AttractionDetailsScreen> {
     );
   }
 }
-
